@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Image,
   View,
@@ -39,9 +39,17 @@ interface SignInFormData {
 }
 
 const SignIn: React.FC = () => {
+  const [keyboard, setKeyboard] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
+
+  Keyboard.addListener('keyboardDidShow', () => {
+    setKeyboard(true);
+  });
+  Keyboard.addListener('keyboardDidHide', () => {
+    setKeyboard(false);
+  });
 
   const { signIn } = useAuth();
 
@@ -129,7 +137,7 @@ const SignIn: React.FC = () => {
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
-      {Keyboard && (
+      {!keyboard && (
         <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
           <Icon name="log-in" size={20} color="#fe9000" />
           <CreateAccountButtonText>Criar Conta</CreateAccountButtonText>
