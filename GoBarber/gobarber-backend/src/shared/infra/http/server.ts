@@ -4,12 +4,13 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 
-import routes from './routes';
+import routes from '@shared/infra/http/routes';
 
-import AppError from './errors/AppError';
-import uploadConfig from './config/upload';
+import AppError from '@shared/errors/AppError';
+import uploadConfig from '@config/upload';
 
-import './database';
+import '@shared/infra/http/typeorm';
+import '@shared/container';
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
     });
   }
 
-  console.error(err);
+  console.error(err); //eslint-disable-line
 
   return res.status(500).json({
     status: 'error',
